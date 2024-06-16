@@ -40,7 +40,7 @@ export const signin = async (req, res, next) => {
             return next(errorHandler(404, "Invalid credentials"));
         }
         const token = jwt.sign(
-            { id: validUser._id, }, 
+            { id: validUser._id, isAdmin: validUser.isAdmin }, 
             process.env.JWT_SECRET_KEY,
             { expiresIn: '1h'}
 
@@ -58,7 +58,7 @@ export const google = async (req, res, next) => {
     try{
         const user = await User.findOne({ email: email});
         if(user){
-            const token = jwt.sign({id: user._id}, process.env.JWT_SECRET_KEY, { expiresIn: '1h'});
+            const token = jwt.sign({id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET_KEY, { expiresIn: '1h'});
             const { password, ...rest } = user._doc;
             res.status(200).cookie('access_token', token, {httpOnly: true}).json(rest);
         }
@@ -72,8 +72,7 @@ export const google = async (req, res, next) => {
                 profilePicture: googlePhotoURL,
             })
             await newUser.save();
-            const token = jwt.sign({id: newUser._id}, process.env.JWT_SECRET_KEY, {expiresIn: '1h'});
-            // console.log(newUser._doc);
+            const token = jwt.sign({id: newUser._id, isAdmin: newUser.isAdmin }, process.env.JWT_SECRET_KEY, {expiresIn: '1h'});
             const { password, ...rest } = newUser._doc;
             res.status(200).cookie('access_token', token, {httpOnly: true}).json(rest);
         }
