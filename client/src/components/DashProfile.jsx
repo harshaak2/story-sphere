@@ -6,6 +6,7 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useDispatch } from "react-redux";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { Link } from "react-router-dom";
 
 import { app } from "../firebase";
 import {
@@ -19,7 +20,7 @@ import {
 } from "../redux/user/userSlice.js";
 
 export default function DashProfile() {
-  const { currentUser, error } = useSelector((state) => state.user);
+  const { currentUser, error, loading } = useSelector((state) => state.user);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileURL, setImageFileURL] = useState(null);
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
@@ -38,7 +39,6 @@ export default function DashProfile() {
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.id]: event.target.value });
   };
-  console.log(formData);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -108,7 +108,6 @@ export default function DashProfile() {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setImageFileUploadProgress(progress.toFixed(0));
-        console.log(imageFileUploadProgress);
       },
       (error) => {
         setImageFileUploadError(
@@ -215,7 +214,7 @@ export default function DashProfile() {
           />
         </div>
         {imageFileUploadError && (
-          <Alert color="failure">{imageFileUploadError}</Alert>
+          <Alert color="failure" className="mx-auto">{imageFileUploadError}</Alert> 
         )}
         {uploadComplete && (
           <Alert color="success" className="self-center">
@@ -242,9 +241,16 @@ export default function DashProfile() {
           placeholder="Password"
           onChange={handleChange}
         />
-        <Button type="submit" gradientDuoTone="purpleToBlue" outline>
-          Update
+        <Button type="submit" gradientDuoTone="purpleToBlue" outline disabled={loading || imageFileUploading}>
+          {loading ? "Loading..." : "Update"}
         </Button>
+        {
+          currentUser.isAdmin && (
+            <Link to={'/create-post'}>
+              <Button type="button" gradientDuoTone='purpleToPink' className="w-full">Create a Post</Button>
+            </Link>
+          )
+        }
       </form>
       <div className="text-red-500 flex justify-between mt-5">
         <span className="cursor-pointer" onClick={()=>setShowModal(true)}>Delete Account</span>
