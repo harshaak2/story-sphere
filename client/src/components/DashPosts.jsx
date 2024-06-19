@@ -75,7 +75,7 @@ export default function DashPosts() {
 
   return (
     // scrollbar from tailwind scrollbar extension from npm
-    <div className="table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-700">
+    <div className="table-auto w-full overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-700">
       {currentUser.isAdmin && userPosts.length > 0 ? (
         <>
           <Table hoverable className="shadow-md">
