@@ -27,12 +27,12 @@ export default function CreatePost() {
     try {
       if (!file) {
         setImageUploadError("Please select an image");
-        // return;
+        return;
       }
       setImageUploadError(null);
       const storage = getStorage(app);
-      const fileName = new Date().getTime() + file.name;
-      const storageRef = ref(storage, `images/${fileName}`);
+      const fileName = new Date().getTime() + '-' + file.name;
+      const storageRef = ref(storage, fileName);
       const uploadTask = uploadBytesResumable(storageRef, file);
       uploadTask.on(
         "state_changed",
@@ -43,6 +43,7 @@ export default function CreatePost() {
         },
         (error) => {
           setImageUploadError(error);
+          setImageUploadProgress(null);
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
@@ -110,7 +111,7 @@ export default function CreatePost() {
             <option value="fashion">Fashion</option>
           </Select>
         </div>
-        <div className="flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted">
+        <div className="flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3">
           <FileInput
             type="file"
             accept="image/*"
