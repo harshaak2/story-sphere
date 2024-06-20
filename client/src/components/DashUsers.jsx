@@ -54,7 +54,22 @@ export default function DashUsers() {
   };
 
   const handleDeleteUser = async () => {
-    
+    setShowModal(false);
+    try{
+      const res = await fetch(`/api/user/delete/${userIDToDelete}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if(!res.ok){
+        console.log(data.message);
+      }else{
+        setUsers((prev) => prev.filter((user) => user._id !== userIDToDelete));
+        setShowModal(false);
+      }
+    }
+    catch(error){
+      console.log(error.message);
+    }
   }
 
   return (
@@ -92,7 +107,7 @@ export default function DashUsers() {
                       className="text-red-500 text-md hover:underline cursor-pointer"
                       onClick={() => {
                         setShowModal(true);
-                        setuserIDToDelete(user._id);
+                        setUserIDToDelete(user._id);
                       }}
                     >
                       Delete
