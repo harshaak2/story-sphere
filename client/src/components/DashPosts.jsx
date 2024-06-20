@@ -80,7 +80,7 @@ export default function DashPosts() {
         <>
           <Table hoverable className="shadow-md">
             <Table.Head>
-              <Table.HeadCell>Date Upadated</Table.HeadCell>
+              <Table.HeadCell>Date Updated</Table.HeadCell>
               <Table.HeadCell>Post Image</Table.HeadCell>
               <Table.HeadCell>Post Title</Table.HeadCell>
               <Table.HeadCell>Category</Table.HeadCell>
@@ -96,11 +96,13 @@ export default function DashPosts() {
                     {new Date(post.updatedAt).toLocaleDateString()}
                   </Table.Cell>
                   <Table.Cell>
-                    <img
-                      src={post.image}
-                      alt={post.title}
-                      className="w-20 h-10 object-cover bg-gray-500"
-                    />
+                    <Link to={`/post/${post.slug}`}>
+                      <img
+                        src={post.image}
+                        alt={post.title}
+                        className="w-20 h-10 object-cover bg-gray-500"
+                      />
+                    </Link>
                   </Table.Cell>
                   <Table.Cell>
                     <Link
@@ -146,18 +148,29 @@ export default function DashPosts() {
       ) : (
         <p>You have not started posting yet</p>
       )}
-      <Modal show={showModal} onClose={()=>setShowModal(false)} popup size='md'>
+      <Modal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        popup
+        size="md"
+      >
         <Modal.Header />
         <Modal.Body>
           <div className="text-center">
             <HiOutlineExclamationCircle className="h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
-            <h3 className="mb-5 text-lg text-gray-500 dark:text-gray-400">Are you sure you wanted to delete your post</h3>
+            <h3 className="mb-5 text-lg text-gray-500 dark:text-gray-400">
+              Are you sure you wanted to delete your post
+            </h3>
             <div className="flex justify-center gap-4">
-              <Button onClick={handleDeletePost} color='failure'>Yes, I'm sure</Button>
-              <Button onClick={()=>setShowModal(false)} color='gray'>No, cancel</Button>
+              <Button onClick={handleDeletePost} color="failure">
+                Yes, I'm sure
+              </Button>
+              <Button onClick={() => setShowModal(false)} color="gray">
+                No, cancel
+              </Button>
             </div>
           </div>
-        </Modal.Body>      
+        </Modal.Body>
       </Modal>
     </div>
   );

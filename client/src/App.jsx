@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import Projects from './pages/Projects';
 import CreatePost from './pages/CreatePost';
 import UpdatePost from './pages/UpdatePost';
+import DashUsers from './components/DashUsers';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
