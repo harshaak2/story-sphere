@@ -50,7 +50,7 @@ export const getPosts = async (req, res, next) => {
     const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
     const lastMonthPosts = await Post.find({createdAt: {$gte: oneMonthAgo}});
 
-    console.log(posts, totalPosts, lastMonthPosts);
+    // console.log(posts, totalPosts, lastMonthPosts);
 
     res.status(200).json({ posts, totalPosts, lastMonthPosts });
 
