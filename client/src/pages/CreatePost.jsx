@@ -90,13 +90,12 @@ export default function CreatePost() {
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 sm:flex-row justify-between">
           <TextInput
+          type="text"
             placeholder="Title"
             required
             id="title"
             className="flex-1"
-            onChange={(e) => {
-              setFormData({ ...formData, title: e.target.value });
-            }}
+            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           />
           <Select
             onChange={(e) => {
@@ -153,8 +152,8 @@ export default function CreatePost() {
           theme="snow"
           placeholder="Write something"
           className="h-72 mb-12"
-          onChange={(value) => {
-            setFormData({ ...formData, content: value });
+          onChange={(content) => {
+            setFormData({ ...formData, content });
           }}
         />
         <Button type="submit" gradientDuoTone="purpleToPink">
