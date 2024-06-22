@@ -102,12 +102,12 @@ export default function CreatePost() {
               setFormData({ ...formData, category: e.target.value });
             }}
           >
-            <option value="uncategorized">Select a Category</option>
-            <option value="technology">Technology</option>
-            <option value="food">Food</option>
-            <option value="travel">Travel</option>
-            <option value="lifestyle">Lifestyle</option>
-            <option value="fashion">Fashion</option>
+            <option value="Uncategorized">Select a Category</option>
+            <option value="Technology">Technology</option>
+            <option value="Food">Food</option>
+            <option value="Travel">Travel</option>
+            <option value="Lifestyle">Lifestyle</option>
+            <option value="Fashion">Fashion</option>
           </Select>
         </div>
         <div className="flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3">

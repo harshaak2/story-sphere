@@ -32,7 +32,6 @@ export default function UpdatePost() {
       const fetchPost = async () => {
         const res = await fetch(`/api/post/getposts?postID=${postID}`);
         const data = await res.json();
-        console.log(data);
         if(!res.ok){
           console.log(data.message);
           setPublishError(data.message)
@@ -135,7 +134,7 @@ export default function UpdatePost() {
             }}
             value={formData.category}
           >
-            <option value="uncategorized">Select a Category</option>
+            <option value="Uncategorized">Select a Category</option>
             <option value="Technology">Technology</option>
             <option value="Food">Food</option>
             <option value="Travel">Travel</option>
