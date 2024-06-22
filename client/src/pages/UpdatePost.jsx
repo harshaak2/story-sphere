@@ -15,7 +15,7 @@ import { useSelector } from 'react-redux';
 
 import { app } from "../firebase.js";
 
-export default function CreatePost() {
+export default function UpdatePost() {
   const [file, setFile] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
@@ -31,7 +31,8 @@ export default function CreatePost() {
     try{
       const fetchPost = async () => {
         const res = await fetch(`/api/post/getposts?postID=${postID}`);
-        const data = res.json();
+        const data = await res.json();
+        console.log(data);
         if(!res.ok){
           console.log(data.message);
           setPublishError(data.message)
@@ -42,6 +43,7 @@ export default function CreatePost() {
           setFormData(data.posts[0])
         }
       }
+      fetchPost();
     }
     catch(error){
       console.log(error);
@@ -52,7 +54,7 @@ export default function CreatePost() {
     try {
       if (!file) {
         setImageUploadError("Please select an image");
-        // return;
+        return;
       }
       setImageUploadError(null);
       const storage = getStorage(app);
@@ -68,6 +70,7 @@ export default function CreatePost() {
         },
         (error) => {
           setImageUploadError(error);
+          setImageUploadProgress(null);
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
@@ -80,13 +83,15 @@ export default function CreatePost() {
     } catch (error) {
       setImageUploadError("Image upload failed");
       setImageUploadProgress(null);
+      console.log(error);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`/api/post/updatepost/${formData._id}/${currentUser._id}`, {
+      console.log(formData);
+      const res = await fetch(`/api/post/updatepost/${postID}/${currentUser._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -108,6 +113,7 @@ export default function CreatePost() {
     }
   };
 
+  {console.log(formData)}
   return (
     <div className="p-3 max-w-3xl mx-auto min-h-screen">
       <h1 className="font-semibold text-center my-7 text-3xl">Update a Post</h1>
@@ -130,11 +136,11 @@ export default function CreatePost() {
             value={formData.category}
           >
             <option value="uncategorized">Select a Category</option>
-            <option value="technology">Technology</option>
-            <option value="food">Food</option>
-            <option value="travel">Travel</option>
-            <option value="lifestyle">Lifestyle</option>
-            <option value="fashion">Fashion</option>
+            <option value="Technology">Technology</option>
+            <option value="Food">Food</option>
+            <option value="Travel">Travel</option>
+            <option value="Lifestyle">Lifestyle</option>
+            <option value="Fashion">Fashion</option>
           </Select>
         </div>
         <div className="flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted">

@@ -25,7 +25,6 @@ export default function DashboardComp() {
       try {
         const res = await fetch('/api/user/getusers?limit=5');
         const data = await res.json();
-        // console.log(data);
         if (res.ok) {
           setUsers(data.users);
           setTotalUsers(data.totalUsers);
@@ -39,7 +38,6 @@ export default function DashboardComp() {
       try {
         const res = await fetch('/api/post/getposts?limit=5');
         const data = await res.json();
-        console.log(data.lastMonthPosts.length);
         if (res.ok) {
           setPosts(data.posts);
           setTotalPosts(data.totalPosts);
@@ -53,11 +51,10 @@ export default function DashboardComp() {
       try {
         const res = await fetch('/api/comment/getcomments?limit=5');
         const data = await res.json();
-        // console.log(data);
         if (res.ok) {
           setComments(data.comments);
           setTotalComments(data.totalComments);
-          setLastMonthComments(data.lastMonthComments);
+          setLastMonthComments(data.commentsInLastMonth);
         }
       } catch (error) {
         console.log(error.message);
