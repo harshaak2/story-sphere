@@ -5,8 +5,8 @@ export default function CallToAction() {
   return (
     <div className='flex flex-col sm:flex-row p-3 border border-teal-500 justify-center items-center rounded-tl-3xl rounded-br-3xl'>
       <div className='flex-1 justify-center flex flex-col items-center'>
-        <h2 className='text-2xl'>Want to learn more?</h2>
-        <p className='text-gray-500 my-2'>Checkout the blogs as per your interest!</p>
+        <h2 className='text-2xl'>Want to write blogs?</h2>
+        <p className='text-gray-500 my-2'>Become a writer and show the world what you have in your mind!</p>
         <Button gradientDuoTone={'purpleToPink'} className='rounded-tl-xl rounded-bl-none'>Learn More</Button>
       </div>
       <div className='p-7 flex-1' >

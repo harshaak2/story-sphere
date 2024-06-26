@@ -28,14 +28,7 @@ export default function FooterComponent() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Google
-                </Footer.Link>
-                <Footer.Link
-                  href="https://youtube.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  YouTube
+                  Developer
                 </Footer.Link>
               </Footer.LinkGroup>
             </div>
@@ -43,14 +36,14 @@ export default function FooterComponent() {
               <Footer.Title title="Follow Us" />
               <Footer.LinkGroup col>
                 <Footer.Link
-                  href="https://github.com"
+                  href="https://github.com/harshaak2"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   Github
                 </Footer.Link>
                 <Footer.Link
-                  href="https://linkedin.com"
+                  href="https://linkedin.com/in/sri-harsha-kurra"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

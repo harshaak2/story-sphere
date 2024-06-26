@@ -2,11 +2,7 @@ import bcryptjs from "bcryptjs";
 
 import { errorHandler } from "../utils/error.js";
 import User from "../models/user.model.js";
-import { parse } from "dotenv";
-
-export const test = (req, res) => {
-  res.json({ message: "API is working" });
-};
+import redisClient from "../utils/redis.js";
 
 export const updateUser = async (req, res, next) => {
   if (req.user.id !== req.params.userID) {
@@ -66,60 +62,95 @@ export const deleteUser = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const signout = (req, res, next) => {
-  try{
-    res.clearCookie("access_token").status(200).json("User has been signed out");
-  }
-  catch(error){
+  try {
+    res
+      .clearCookie("access_token")
+      .status(200)
+      .json("User has been signed out");
+  } catch (error) {
     next(error);
   }
-}
+};
 
 export const getUsers = async (req, res, next) => {
-  if(!req.user.isAdmin){
-    return next(errorHandler(403, 'You are not allowed to see the users list'))
+  if (!req.user.isAdmin) {
+    return next(errorHandler(403, "You are not allowed to see the users list"));
   }
-  try{
+
+  try {
     const startIndex = parseInt(req.query.startIndex) || 0;
     const limit = parseInt(req.query.limit) || 9;
-    const sortDirection = req.query.sort === 'asc' ? 1 : -1
-    const users = await User.find().sort({createdAt: sortDirection}).skip(startIndex).limit(limit);
-    const usersWithoutPassword = users.map((user) => {
-      const { password, ...rest } = user._doc
-      return rest;
-    })
-    const totalUsers = await User.countDocuments();
-    const now = new Date();
-    const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
-    const lastMonthUsers = await User.countDocuments({
-      createdAt: {
-        $gte: oneMonthAgo,
-      },
-    })
+    const sortDirection = req.query.sort === "asc" ? 1 : -1;
 
-    res.status(200).json({
-      users: usersWithoutPassword, 
-      totalUsers,
-      lastMonthUsers,
-    })
-  }
-  catch(error){
+    const cacheKey = `users_${startIndex}_${limit}_${sortDirection}`;
+
+    redisClient.get(cacheKey, async (err, cachedData) => {
+      if (err) {
+        return next(err);
+      }
+      if (cachedData) {
+        return res.status(200).json(JSON.parse(cachedData));
+      } else {
+        const users = await User.find()
+          .sort({ createdAt: sortDirection })
+          .skip(startIndex)
+          .limit(limit);
+        const usersWithoutPassword = users.map((user) => {
+          const { password, ...rest } = user._doc;
+          return rest;
+        });
+
+        const totalUsers = await User.countDocuments();
+        const now = new Date();
+        const oneMonthAgo = new Date(
+          now.getFullYear(),
+          now.getMonth() - 1,
+          now.getDate()
+        );
+        const lastMonthUsers = await User.countDocuments({
+          createdAt: {
+            $gte: oneMonthAgo,
+          },
+        });
+
+        const response = {
+          users: usersWithoutPassword,
+          totalUsers,
+          lastMonthUsers,
+        };
+        redisClient.setex(cacheKey, 3600, JSON.stringify(response));
+        res.status(200).json(response);
+      }
+    });
+  } catch (error) {
     next(error);
   }
-}
+};
 
 export const getUser = async (req, res, next) => {
-  try{
-    const user = await User.findById(req.params.userID);
-    if(!user){
-      return next(errorHandler(404, 'User not found'))
-    }
-    const { password, ...rest } = user._doc;
-    res.status(200).json(rest);
-  }
-  catch(error){
+  try {
+    const userID = req.params.userID;
+    const cacheKey = `user_${userID}`;
+    redisClient.get(cacheKey, async (error, cachedData) => {
+      if (error) {
+        return next(error);
+      }
+      if (cachedData) {
+        return res.status(200).json(JSON.parse(cachedData));
+      } else {
+        const user = await User.findById(req.params.userID);
+        if (!user) {
+          return next(errorHandler(404, "User not found"));
+        }
+        const { password, ...rest } = user._doc;
+        redisClient.setex(cacheKey, 3600, JSON.stringify(rest));
+        res.status(200).json(rest);
+      }
+    });
+  } catch (error) {
     next(error);
   }
-}
+};

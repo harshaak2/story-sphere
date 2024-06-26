@@ -18,8 +18,8 @@ export default function Home() {
   return (
     <div>
         <div className='flex flex-col gap-6 lg:p-28 p-3 max-w-6xl mx-auto'>
-          <h1 className='text-3xl font-bold lg:text-6xl'>Welcome to Blog</h1>
-          <p className='text-gray-500 text-xs sm:text-sm'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Recusandae aliquid tempore libero cupiditate dolorum possimus rerum illo iusto velit perferendis eum consequatur voluptate temporibus, perspiciatis quia inventore quae suscipit a provident sed ipsam culpa? Beatae quibusdam voluptas quis dolores cum.</p>
+          <h1 className='text-3xl font-bold lg:text-6xl'>Welcome to the Sphere</h1>
+          <p className='text-gray-500 text-xs sm:text-sm'>art of sharing experiences meets modern digital expression, curated by a vibrant community of writers and enthusiasts.</p>
           <Link to='/search' className='text-xs sm:text-sm text-teal-500 font-bold hover:underline'>View all  Posts</Link>
         </div>
         <div className='p-3 bg-amber-100 dark:bg-slate-700'>

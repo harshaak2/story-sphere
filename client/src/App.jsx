@@ -6,7 +6,6 @@ import About from './pages/About';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Dashboard from './pages/Dashboard';
-import Projects from './pages/Projects';
 import CreatePost from './pages/CreatePost';
 import UpdatePost from './pages/UpdatePost';
 import PostPage from './pages/PostPage';
@@ -37,7 +36,6 @@ export default function App() {
           <Route path='/update-post/:postID' element={<UpdatePost />} />
         </Route>
         <Route path='/post/:postSlug' element={<PostPage />} />
-        <Route path='/projects' element={<Projects />} />
       </Routes>
       <Footer></Footer>
     </BrowserRouter>
