@@ -24,7 +24,7 @@ export default function FooterComponent() {
               <Footer.Title title="About" />
               <Footer.LinkGroup col>
                 <Footer.Link
-                  href="https://google.com"
+                  href="https://portfolio-sriharsha.vercel.app/"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

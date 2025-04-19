@@ -39,6 +39,7 @@ export const signin = async (req, res, next) => {
         if(!validPassword){
             return next(errorHandler(404, "Invalid credentials"));
         }
+        // TODO: add more information to the token
         const token = jwt.sign(
             { id: validUser._id, isAdmin: validUser.isAdmin }, 
             process.env.JWT_SECRET_KEY,
@@ -78,4 +79,28 @@ export const google = async (req, res, next) => {
     catch(error){
         next(error);
     }
+}
+
+export const generateUserToken = async (req, res) => {
+    // generate random id with 24 chars which has lowercase letters and numbers
+    var id = Math.random().toString(36).substring(2, 26);
+    var isAdmin = false;
+
+    // generating a random jwt user token for local testing
+    const token = jwt.sign({ id, isAdmin }, process.env.JWT_SECRET_KEY, {
+        expiresIn: '1h'
+    });
+    res.status(200).json({ isAdmin, token });
+}
+
+export const generateAdminToken = async (req, res) => {
+    // generate random id with 24 chars which has lowercase letters and numbers
+    var id = Math.random().toString(36).substring(2, 26);
+    var isAdmin = true;
+
+    // generating a random jwt user token for local testing
+    const token = jwt.sign({ id, isAdmin }, process.env.JWT_SECRET_KEY, {
+        expiresIn: '1h'
+    });
+    res.status(200).json({ isAdmin, token });
 }
