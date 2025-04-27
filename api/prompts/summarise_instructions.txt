@@ -12,6 +12,5 @@ JSON OUTPUT FORMAT:
       "Key point 2",
       "Key point 3"
     ],
-    "reading_time": "give an approximate time the user would read the summary in"
   }
 }

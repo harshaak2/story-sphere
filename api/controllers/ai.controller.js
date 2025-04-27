@@ -134,17 +134,55 @@ export const rephraseContent = async (req, res) => {
 
 export const summariseContent = async (req, res) => {
   const { content } = req.body;
-  const responseJSON = await ollama.chat({
-    model: "llama3:8b",
-    messages: [
-      { role: "system", content: summariseInstructions },
-      { role: "user", content: content }
-    ],
-  });
-  if (responseJSON.error) {
-    return res.status(500).json({ error: responseJSON.error });
+  
+  try {
+    const responseJSON = await ollama.chat({
+      model: "llama3:8b",
+      messages: [
+        { role: "system", content: summariseInstructions },
+        { role: "user", content: content }
+      ],
+    });
+    
+    if (responseJSON.error) {
+      return res.status(500).json({ error: responseJSON.error });
+    }
+    
+    const rawContent = responseJSON.message.content;
+    
+    // Try to parse the response as JSON
+    try {
+      // First, try direct parsing
+      const parsedResponse = JSON.parse(rawContent);
+      return res.status(200).json(parsedResponse);
+    } catch (parseError) {
+      console.error("Initial JSON parsing failed:", parseError.message);
+      
+      // Try to extract JSON from the text response
+      try {
+        // Look for JSON-like content using regex
+        const jsonMatch = rawContent.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          const extractedJson = jsonMatch[0];
+          const parsedResponse = JSON.parse(extractedJson);
+          console.log("Extracted JSON successfully");
+          return res.status(200).json(parsedResponse);
+        }
+      } catch (extractError) {
+        console.error("Failed to extract JSON:", extractError.message);
+      }
+      
+      // If all parsing attempts fail, return an error so the user can try again
+      return res.status(500).json({ 
+        error: "Error summarizing content. Please try again.",
+        message: "Failed to parse AI response into the expected format."
+      });
+    }
+  } catch (error) {
+    console.error("Error in summarize process:", error);
+    return res.status(500).json({ 
+      error: "Failed to summarize content", 
+      message: error.message 
+    });
   }
-  // handle output response format from the model
-  const parsedResponse = JSON.parse(responseJSON.message.content);
-  return res.status(200).json(parsedResponse);
-}
+};
