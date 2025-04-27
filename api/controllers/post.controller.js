@@ -39,7 +39,8 @@ export const getPosts = async (req, res, next) => {
         next(error);
       }
       if (cachedData) {
-        return res.status(200).json(JSON.stringify(cachedData));
+        // Parse the cached data since Redis stores it as a string
+        return res.status(200).json(JSON.parse(cachedData));
       } else {
         const posts = await Post.find({
           ...(req.query.userID && { userID: req.query.userID }),
@@ -48,8 +49,8 @@ export const getPosts = async (req, res, next) => {
           ...(req.query.postID && { _id: req.query.postID }),
           ...(req.query.searchTerm && {
             $or: [
-              { title: { $regex: req.query.searchTerm, $options: "i" } },
-              { content: { $regex: req.query.searchTerm, $options: "i" } },
+              { title: { $regex: `(^|\\s)${req.query.searchTerm}(\\s|$)`, $options: "i" } },
+              { content: { $regex: `(^|\\s)${req.query.searchTerm}(\\s|$)`, $options: "i" } },
             ],
           }),
         })
@@ -110,5 +111,18 @@ export const updatePost = async (req, res, next) => {
     res.status(200).json(updatedPost);
   } catch (error) {
     next(error);
+  }
+};
+
+// getAllPosts is a helper function to generateNovelty which uses all the posts 
+// to generate novelty
+export const getAllPosts = async () => {
+  try {
+    // Fetch all posts from the database without pagination
+    const posts = await Post.find({}).sort({ updatedAt: -1 });
+    return posts;
+  } catch (error) {
+    console.error("Error fetching all posts:", error);
+    throw error;
   }
 };

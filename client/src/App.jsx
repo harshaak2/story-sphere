@@ -10,6 +10,7 @@ import CreatePost from './pages/CreatePost';
 import UpdatePost from './pages/UpdatePost';
 import PostPage from './pages/PostPage';
 import Search from './pages/Search';
+import Posts from './pages/Posts';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -19,25 +20,26 @@ import ScrollToTop from './components/ScrollToTop';
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <Header />
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/about' element={<About />} />
-        <Route path='/sign-in' element={<SignIn />} />
-        <Route path='/sign-up' element={<SignUp />} />
-        <Route path='/search' element={<Search />} />
-        <Route element={<PrivateRoute />}>
-          <Route path='/dashboard' element={<Dashboard />} />
-        </Route>
-        <Route element={<OnlyAdminPrivateRoute />}>
-          <Route path='/create-post' element={<CreatePost />} />
-          <Route path='/update-post/:postID' element={<UpdatePost />} />
-        </Route>
-        <Route path='/post/:postSlug' element={<PostPage />} />
-      </Routes>
-      <Footer></Footer>
-    </BrowserRouter>
-  )
+      <BrowserRouter>
+          <ScrollToTop />
+          <Header />
+          <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/sign-in" element={<SignIn />} />
+              <Route path="/sign-up" element={<SignUp />} />
+              <Route path="/search" element={<Search />} />
+              <Route path="/posts" element={<Posts />} />
+              <Route path="/create-post" element={<CreatePost />} />
+              <Route path="/update-post/:postID" element={<UpdatePost />} />
+              <Route element={<PrivateRoute />}>
+                  <Route path="/dashboard" element={<Dashboard />} />
+              </Route>
+              <Route element={<OnlyAdminPrivateRoute />}>
+              </Route>
+              <Route path="/post/:postSlug" element={<PostPage />} />
+          </Routes>
+          <Footer></Footer>
+      </BrowserRouter>
+  );
 }

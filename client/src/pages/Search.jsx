@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import PostCard from "../components/PostCard";
 
-export default function Search() {
+export default function 
+Search() {
   const [sidebarData, setSidebarData] = useState({
     searchTerm: "",
     sort: "desc",
@@ -18,9 +19,12 @@ export default function Search() {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
-    const searchTermFromURL = urlParams.get("searchTerm");
+    const searchTermFromURL = urlParams.get("searchTerm") || "";
     const sortFromURL = urlParams.get("sort");
     const categoryFromURL = urlParams.get("category");
+    if (!searchTermFromURL) {
+      urlParams.set("searchTerm", "");
+    }
     if (searchTermFromURL || sortFromURL || categoryFromURL) {
       setSidebarData({
         ...sidebarData,
@@ -31,21 +35,26 @@ export default function Search() {
     }
     const fetchPosts = async () => {
       setLoading(true);
-      const searchQuery = urlParams.toString();
-      const res = await fetch(`/api/post/getposts?${searchQuery}`);
-      if (!res.ok) {
-        setLoading(false);
-        return;
-      }
-      if (res.ok) {
+      try {
+        const searchQuery = urlParams.toString();
+        const res = await fetch(`/api/post/getposts?${searchQuery}`);
+        if (!res.ok) {
+          setLoading(false);
+          return;
+        }
+        
         const data = await res.json();
-        setPosts(data.posts);
-        setLoading(false);
-        if (data.posts.length >= 9) {
-          setShowMore(true);
+        if (data && data.posts) {
+          setPosts(data.posts);
+          setShowMore(data.posts.length >= 9);
         } else {
+          setPosts([]);
           setShowMore(false);
         }
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchPosts();
@@ -77,7 +86,11 @@ export default function Search() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const urlParams = new URLSearchParams(location.search);
-    urlParams.set("searchTerm", sidebarData.searchTerm);
+    if (sidebarData.searchTerm.trim() === "") {
+      urlParams.delete("searchTerm");
+    } else {
+      urlParams.set("searchTerm", sidebarData.searchTerm);
+    }
     urlParams.set("sort", sidebarData.sort);
     urlParams.set("category", sidebarData.category);
     const searchQuery = urlParams.toString();
@@ -87,21 +100,24 @@ export default function Search() {
   const handleShowMore = async () => {
     const numberOfPosts = posts.length;
     const startIndex = numberOfPosts;
-    const urlParams = new URLSearchParams(location.search);
-    urlParams.set("startIndex", startIndex);
-    const searchQuery = urlParams.toString();
-    const res = await fetch(`/api/post/getposts?${searchQuery}`);
-    if (!res.ok) {
-      return;
-    }
-    if (res.ok) {
+    try {
+      const urlParams = new URLSearchParams(location.search);
+      urlParams.set("startIndex", startIndex);
+      const searchQuery = urlParams.toString();
+      const res = await fetch(`/api/post/getposts?${searchQuery}`);
+      if (!res.ok) {
+        return;
+      }
+      
       const data = await res.json();
-      setPosts([...posts, ...data.posts]);
-      if (data.posts.length >= 9) {
-        setShowMore(true);
+      if (data && data.posts) {
+        setPosts([...posts, ...data.posts]);
+        setShowMore(data.posts.length >= 9);
       } else {
         setShowMore(false);
       }
+    } catch (error) {
+      console.error('Error loading more posts:', error);
     }
   };
 
@@ -153,6 +169,9 @@ export default function Search() {
         </form>
       </div>
       <div className="w-full">
+        {/* <h1 className="text-3xl font-semibold sm:border-b border-gray-500 p-3 mt-5">
+          All Posts
+        </h1> */}
         <h1 className="text-3xl font-semibold sm:border-b border-gray-500 p-3 mt-5 ">
           Post Results:
         </h1>
