@@ -62,19 +62,6 @@ export default function Header() {
         </span>
         <span>Sphere</span>
       </Link>
-      <form onSubmit={handleSubmit}>
-        <TextInput
-          type="text"
-          placeholder="Search"
-          rightIcon={AiOutlineSearch}
-          className="hidden lg:inline"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </form>
-      <Button className="w-12 h-10 lg:hidden" color="gray" pill>
-        <AiOutlineSearch />
-      </Button>
       <div className="flex gap-2 md:order-2">
         <Button
           className="w-12 h-10 hidden sm:inline"
@@ -118,6 +105,19 @@ export default function Header() {
       <Navbar.Collapse>
         <Navbar.Link active={path === "/"}>
           <Link to="/">Home</Link>
+        </Navbar.Link>
+        {/* <Navbar.Link active={path === "/posts"}>
+          <Link to="/posts">Posts</Link>
+        </Navbar.Link> */}
+        <Navbar.Link active={path === "/search"}>
+          <Link to="/search" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+            Search
+          </Link>
+        </Navbar.Link>
+        <Navbar.Link active={path === "/search"}>
+          <Link to="/create-post" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+            Write
+          </Link>
         </Navbar.Link>
         <Navbar.Link active={path === "/about"}>
           <Link to="/about">About</Link>

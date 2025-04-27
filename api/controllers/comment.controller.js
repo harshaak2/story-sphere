@@ -39,9 +39,9 @@ export const getPostComments = async (req, res, next) => {
         });
         if (comments.length > 0) {
           redisClient.setex(cacheKey, 3600, JSON.stringify(comments));
-          res.status(200).json(comments);
+          return res.status(200).json(comments);
         }
-        // res.status(200).json(comments);
+        return res.status(404).json({ message: "No comments found for this post." });
       }
     });
   } catch (error) {

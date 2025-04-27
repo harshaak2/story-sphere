@@ -20,10 +20,7 @@ export default function Home() {
         <div className='flex flex-col gap-6 lg:p-28 p-3 max-w-6xl mx-auto'>
           <h1 className='text-3xl font-bold lg:text-6xl'>Welcome to the Sphere</h1>
           <p className='text-gray-500 text-xs sm:text-sm'>art of sharing experiences meets modern digital expression, curated by a vibrant community of writers and enthusiasts.</p>
-          <Link to='/search' className='text-xs sm:text-sm text-teal-500 font-bold hover:underline'>View all  Posts</Link>
-        </div>
-        <div className='p-3 bg-amber-100 dark:bg-slate-700'>
-          <CallToAction />
+          {/* <Link to='/posts' className='text-xs sm:text-sm text-teal-500 font-bold hover:underline'>View all Posts</Link> */}
         </div>
         <div className="mx-auto max-w-6xl flex flex-col gap-8 py-7">
           {
@@ -35,10 +32,13 @@ export default function Home() {
                     <PostCard key={index} post={post} />
                   ))}
                 </div>
-                <Link to='/search' className='text-teal-500 text-lg hover:underline text-center'>View all posts</Link>
+                <Link to='/posts' className='text-teal-500 text-lg hover:underline text-center'>View all posts</Link>
               </div>
             )
           }
+        </div>
+        <div className='p-3 bg-amber-100 dark:bg-slate-700'>
+          <CallToAction />
         </div>
     </div>
   )
