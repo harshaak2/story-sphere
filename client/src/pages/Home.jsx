@@ -17,7 +17,7 @@ export default function Home() {
   }, [])
   return (
     <div>
-        <div className='flex flex-col gap-6 lg:p-28 p-3 max-w-6xl mx-auto'>
+        <div className='flex flex-col gap-6 lg:pt-28 pl-28 pr-28 pb-20 p-3 max-w-6xl mx-auto'>
           <h1 className='text-3xl font-bold lg:text-6xl'>Welcome to the Sphere</h1>
           <p className='text-gray-500 text-xs sm:text-sm'>art of sharing experiences meets modern digital expression, curated by a vibrant community of writers and enthusiasts.</p>
           {/* <Link to='/posts' className='text-xs sm:text-sm text-teal-500 font-bold hover:underline'>View all Posts</Link> */}

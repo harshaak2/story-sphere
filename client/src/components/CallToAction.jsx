@@ -7,7 +7,7 @@ export default function CallToAction() {
       <div className='flex-1 justify-center flex flex-col items-center'>
         <h2 className='text-2xl'>Want to write blogs?</h2>
         <p className='text-gray-500 my-2'>Become a writer and show the world what you have in your mind!</p>
-        <Button gradientDuoTone={'purpleToPink'} className='rounded-tl-xl rounded-bl-none'>Learn More</Button>
+        <Button gradientDuoTone={'purpleToPink'} href='/create-post' className='rounded-tl-xl rounded-bl-none'>Start Writing</Button>
       </div>
       <div className='p-7 flex-1' >
         <img src="https://fjwp.s3.amazonaws.com/blog/wp-content/uploads/2018/12/27082207/Freelancers.png" alt="img" />
